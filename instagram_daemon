@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+require 'bundler/inline'
+require './bot.rb'
+require 'optparse'
+
+gemfile do
+  source 'https://rubygems.org'
+  gem 'json'
+  gem 'colorize'
+  gem 'mechanize'
+  gem 'hashie'
+  gem 'pry'
+  gem 'pry-byebug'
+end
+
+username = ""
+password = ""
+hashtags = []
+log_path = 'instagram.log'
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: instagram_daemon [options]"
+
+  opts.on("-u", "--username=USERNAME", String, "Instagram Username") do |value|
+    username = value
+  end
+
+  opts.on("-p", "--password=PASSWORD", String, "Instagram Password") do |value|
+    password = value
+  end
+
+  opts.on("-h", "--hashtags=HASHTAGS", Array, "Hashtags to get posts and users from") do |values|
+    hashtags = values
+  end
+
+  opts.on("-l", "--log-path=LOG_PATH", String, "Path to log file (default: instagram.log)") do |value|
+    log_path = value
+  end
+end.parse!
+
+Bot.daemon_run(
+  username: username,
+  password: password,
+  hashtags: hashtags,
+  log_path: log_path,
+)
