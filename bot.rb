@@ -360,9 +360,9 @@ class Bot
       log "Retrying GET #{url}..." unless i.zero?
       begin
         return @agent.get(url)
-      rescue Mechanize::ResponseReadError, Mechanize::ResponseCodeError, Errno::EHOSTUNREACH => e
+      rescue Mechanize::ResponseReadError, Mechanize::ResponseCodeError, Errno::EHOSTUNREACH, SocketError => e
         log "GET request to #{url} failed with #{e.class}".red
-        wait_random(min: 5, max: 10)
+        wait_random(min: 10, max: 15)
       end
     end
 
